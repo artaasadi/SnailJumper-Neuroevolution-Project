@@ -11,16 +11,31 @@ class NeuralNetwork:
         3 neurons in the input layer, 10 neurons in the hidden layer, and 2 neurons in the output layer.
         """
         # TODO (Implement FCNNs architecture here)
-        pass
+        layers = []
+        biases = []
+        for i in range((len(layer_sizes) - 1)) :
+            layer = np.random.normal(0, 1.0, [layer_sizes[i+1], layer_sizes[i]])
+            bias = np.zeros([layer_sizes[i+1], 1])
+            layers.append(layer)
+            biases.append(bias)
+        self.layers = layers
+        self.biases = biases
 
-    def activation(self, x):
+    def activation(self, x, function= "sigmoid"):
         """
         The activation function of our neural network, e.g., Sigmoid, ReLU.
         :param x: Vector of a layer in our network.
         :return: Vector after applying activation function.
         """
         # TODO (Implement activation function here)
-        pass
+        if function == "sigmoid" :
+            return 1/(1 + np.exp(-x))
+        elif function == "softmax" :
+            e = np.exp(x)
+            return e / e.sum()
+        elif function == "ReLU" :
+            return np.maximum(x,0)
+
 
     def forward(self, x):
         """
@@ -29,4 +44,7 @@ class NeuralNetwork:
         :return: Output vector
         """
         # TODO (Implement forward function here)
-        pass
+        answer = x
+        for i in range(len(self.layers)) :
+            answer = self.activation((self.layers[i] @ answer + self.biases[i]))
+        return answer
