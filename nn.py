@@ -3,7 +3,7 @@ import numpy as np
 
 class NeuralNetwork:
 
-    def __init__(self, layer_sizes, layers= [], biases= []):
+    def __init__(self, layer_sizes):
         """
         Neural Network initialization.
         Given layer_sizes as an input, you have to design a Fully Connected Neural Network architecture here.
@@ -11,12 +11,14 @@ class NeuralNetwork:
         3 neurons in the input layer, 10 neurons in the hidden layer, and 2 neurons in the output layer.
         """
         # TODO (Implement FCNNs architecture here)
-        if layers == [] and biases == [] :
-            for i in range((len(layer_sizes) - 1)) :
-                layer = np.random.normal(0, 1, [layer_sizes[i+1], layer_sizes[i]])
-                bias = np.zeros([layer_sizes[i+1], ])
-                layers.append(layer)
-                biases.append(bias)
+        layers = []
+        biases = []
+        for i in range((len(layer_sizes) - 1)) :
+            np.random.seed()
+            layer = np.random.normal(0, 1, [layer_sizes[i+1], layer_sizes[i]])
+            bias = np.zeros([layer_sizes[i+1], ])
+            layers.append(layer)
+            biases.append(bias)
         self.layers = layers
         self.biases = biases
 

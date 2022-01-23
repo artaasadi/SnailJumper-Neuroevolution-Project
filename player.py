@@ -21,7 +21,6 @@ def get_obstacles(obstacles, number):
         obstacles += [(((fly['x'] - 177)/233) * 2) - 1, (((fly['y'] + 100)/740) * 2) - 1]
     else :
         obstacles += [0, -1]
-    #obstacles = list(map(lambda d: (d + 1)/2, obstacles))
     return obstacles
 
 
