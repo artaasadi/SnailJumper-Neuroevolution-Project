@@ -10,11 +10,17 @@ def get_obstacles(obstacles, number):
     obstacles = list(filter(lambda d: d['y'] < 640, obstacles))
     # only get {number} nearest obstacles
     obstacles = sorted(obstacles, key= lambda d: d['y'], reverse= True)
+    fly = list(filter(lambda d: (177 < d['x'] < 410) & (d['y'] > 100), obstacles))
     if len(obstacles) < number :
         obstacles += [{'x': 410, 'y': -100}] * (number - len(obstacles))
     else :
         obstacles = obstacles[:number]
     obstacles = list(map(lambda d: (d['y'] + 100)/(740) if d['x'] == 410 else -((d['y'] + 100)/(740)), obstacles))
+    if len(fly) > 0 :
+        fly = fly[0]
+        obstacles += [(((fly['x'] - 177)/233) * 2) - 1, (((fly['y'] + 100)/740) * 2) - 1]
+    else :
+        obstacles += [0, -1]
     #obstacles = list(map(lambda d: (d + 1)/2, obstacles))
     return obstacles
 
@@ -50,8 +56,9 @@ class Player(pygame.sprite.Sprite):
 
         if self.game_mode == "Neuroevolution":
             self.fitness = 0  # Initial fitness
-
-            layer_sizes = [self.near_obstacles_select + 1, 8, 10, 2]  # TODO (Design your architecture here by changing the values)
+            
+            # one for player_x 2 for flies' x and y
+            layer_sizes = [self.near_obstacles_select + 3, 8, 10, 2]  # TODO (Design your architecture here by changing the values)
             self.nn = NeuralNetwork(layer_sizes)
 
     def think(self, screen_width, screen_height, obstacles, player_x, player_y):
@@ -68,7 +75,6 @@ class Player(pygame.sprite.Sprite):
         :param player_y: 'y' position of the player
         """
         # TODO (change player's gravity here by calling self.change_gravity)
-
         inputs = np.array([(player_x - 177)/253] + get_obstacles(obstacles, self.near_obstacles_select))
         outputs = self.nn.forward(inputs)
         '''if np.argmax(outputs) == 0 :

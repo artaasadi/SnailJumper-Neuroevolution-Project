@@ -19,10 +19,10 @@ def roulette_wheel(x, num) :
 def q_tournoment(x, num, q= 2) :
     l = []
     for i in range(num) :
-        rnd = round(np.random.random() * len(x))
+        rnd = round(np.random.random() * (len(x)-1))
         max = x[rnd]
         for j in range(q - 1) :
-            rnd = round(np.random.random() * len(x))
+            rnd = round(np.random.random() * (len(x)-1))
             temp = x[rnd]
             if temp.fitness > max.fitness :
                 max = temp
@@ -55,9 +55,9 @@ class Evolution:
         # TODO (Implement top-k algorithm here)
         # TODO (Additional: Implement roulette wheel here)
         # TODO (Additional: Implement SUS here)
-
+        next_population = sus(players, num_players)
         # TODO (Additional: Learning curve)
-        return players[: num_players]
+        return next_population
 
     def generate_new_population(self, num_players, prev_players=None):
         """
@@ -72,6 +72,8 @@ class Evolution:
             return [Player(self.game_mode) for _ in range(num_players)]
         else:
             # TODO ( Parent selection and child generation )
+            parents = sus(prev_players, num_players)
+            
             new_players = prev_players  # DELETE THIS AFTER YOUR IMPLEMENTATION
             return new_players
 
