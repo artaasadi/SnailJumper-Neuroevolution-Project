@@ -14,8 +14,8 @@ class NeuralNetwork:
         layers = []
         biases = []
         for i in range((len(layer_sizes) - 1)) :
-            layer = np.random.normal(0, 1.0, [layer_sizes[i+1], layer_sizes[i]])
-            bias = np.zeros([layer_sizes[i+1], 1])
+            layer = np.random.normal(0, 1, [layer_sizes[i+1], layer_sizes[i]])
+            bias = np.zeros([layer_sizes[i+1], ])
             layers.append(layer)
             biases.append(bias)
         self.layers = layers
@@ -46,5 +46,6 @@ class NeuralNetwork:
         # TODO (Implement forward function here)
         answer = x
         for i in range(len(self.layers)) :
-            answer = self.activation((self.layers[i] @ answer + self.biases[i]))
+            answer = self.activation(((self.layers[i] @ answer) + self.biases[i]), "sigmoid")
+
         return answer

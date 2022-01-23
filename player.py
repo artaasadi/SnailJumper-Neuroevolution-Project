@@ -5,6 +5,21 @@ from variables import global_variables
 from nn import NeuralNetwork
 import numpy as np
 
+def get_obstacles(obstacles, number):
+    # filter those obstacles which passed
+    obstacles = list(filter(lambda d: d['y'] < 640, obstacles))
+    # only get {number} nearest obstacles
+    obstacles = sorted(obstacles, key= lambda d: d['y'], reverse= True)
+    if len(obstacles) < number :
+        obstacles += [{'x': 410, 'y': -100}] * (number - len(obstacles))
+    else :
+        obstacles = obstacles[:number]
+    obstacles = list(map(lambda d: (d['y'] + 100)/(740) if d['x'] == 410 else -((d['y'] + 100)/(740)), obstacles))
+    #obstacles = list(map(lambda d: (d + 1)/2, obstacles))
+    return obstacles
+
+
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, game_mode):
         super().__init__()
@@ -31,11 +46,12 @@ class Player(pygame.sprite.Sprite):
         self.player_gravity = 'left'
         self.gravity = 10
         self.game_mode = game_mode
+        self.near_obstacles_select = 4
 
         if self.game_mode == "Neuroevolution":
             self.fitness = 0  # Initial fitness
 
-            layer_sizes = [3, 8, 10, 2]  # TODO (Design your architecture here by changing the values)
+            layer_sizes = [self.near_obstacles_select + 1, 8, 10, 2]  # TODO (Design your architecture here by changing the values)
             self.nn = NeuralNetwork(layer_sizes)
 
     def think(self, screen_width, screen_height, obstacles, player_x, player_y):
@@ -53,21 +69,18 @@ class Player(pygame.sprite.Sprite):
         """
         # TODO (change player's gravity here by calling self.change_gravity)
 
-        inputs = np.array([obstacles, player_x, player_y])
-        #print("============================")
-        #print(inputs)
-        #print("============================")
-        '''outputs = self.nn.forward(inputs)
+        inputs = np.array([(player_x - 177)/253] + get_obstacles(obstacles, self.near_obstacles_select))
+        outputs = self.nn.forward(inputs)
+        '''if np.argmax(outputs) == 0 :
+            self.change_gravity("left")
+        else :
+            self.change_gravity("right")'''
         if outputs[0] >= 0.8 :
             self.change_gravity("left")
         elif outputs[1] >= 0.8 :
-            self.change_gravity("right")'''
+            self.change_gravity("right")
 
         # This is a test code that changes the gravity based on a random number. Remove it before your implementation.
-        if random.randint(0, 2):
-            self.change_gravity('left')
-        else:
-            self.change_gravity('right')
 
     def change_gravity(self, new_gravity):
         """
