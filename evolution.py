@@ -1,6 +1,43 @@
 import copy
 
 from player import Player
+import numpy as np
+
+def top_k(x, num) :
+    x= sorted(x, key= lambda i: i.fitness, reverse= True)
+    return x[:num]
+
+def roulette_wheel(x, num) :
+    fits = list(np.cumsum(list(map(lambda i: i.fitness, x))))
+    l = []
+    for i in range(num):
+        rnd = np.random.random() * fits[-1]
+        index = fits.index(next(i for i in fits if rnd <= i))
+        l.append(x[index])
+    return l
+
+def q_tournoment(x, num, q= 2) :
+    l = []
+    for i in range(num) :
+        rnd = round(np.random.random() * len(x))
+        max = x[rnd]
+        for j in range(q - 1) :
+            rnd = round(np.random.random() * len(x))
+            temp = x[rnd]
+            if temp.fitness > max.fitness :
+                max = temp
+        l.append(max)
+    return l
+
+def sus(x, num) :
+    fits = list(np.cumsum(list(map(lambda i: i.fitness, x))))
+    l = []
+    length = fits[-1] / num
+    rnd = np.random.random() * length
+    for i in range(num) :
+        index = fits.index(next(j for j in fits if (rnd + (i * length)) <= j))
+        l.append(x[index])
+    return l
 
 
 class Evolution:
