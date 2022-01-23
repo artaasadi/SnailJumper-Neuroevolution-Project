@@ -73,10 +73,15 @@ class Evolution:
         else:
             # TODO ( Parent selection and child generation )
             parents = sus(prev_players, num_players)
-            
+
             new_players = prev_players  # DELETE THIS AFTER YOUR IMPLEMENTATION
             return new_players
 
+    
+    def make_baby(self, father, mother):
+        baby = Player(self.game_mode)
+        
+    
     def clone_player(self, player):
         """
         Gets a player as an input and produces a clone of that player.
