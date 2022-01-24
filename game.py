@@ -196,7 +196,7 @@ if __name__ == '__main__':
             if event.type == pygame.QUIT:
                 data = pd.DataFrame(np.array(evolution.accuracy), columns= ["min", "max", "avg", "var"])
                 csv_name = "accuracy/accuracy_" + datetime.now().strftime("%d%H%M%S") + ".csv"
-                data.to_csv(csv_name, index= True)
+                data.to_csv(csv_name)
                 pygame.quit()
                 exit()
             if game_active:
