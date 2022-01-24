@@ -27,6 +27,10 @@ def display_generation():
     score_rect = score_surf.get_rect(topleft=(8, 50))
     screen.blit(score_surf, score_rect)
 
+def display_players():
+    score_surf = small_game_font.render(f"Population: {len(players)}", False, (64, 64, 64))
+    score_rect = score_surf.get_rect(topleft=(8, 100))
+    screen.blit(score_surf, score_rect)
 
 class Obstacle(pygame.sprite.Sprite):
     def __init__(self, obstacle_type, position=None):
@@ -242,6 +246,7 @@ if __name__ == '__main__':
             current_score = display_score()
             if game_mode == "Neuroevolution":
                 display_generation()
+                display_players()
                 update_fitness()
 
             if current_score > best_score:
