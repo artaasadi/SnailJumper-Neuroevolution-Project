@@ -2,6 +2,7 @@ import copy
 
 from player import Player
 import numpy as np
+import random
 
 def top_k(x, num) :
     x= sorted(x, key= lambda i: i.fitness, reverse= True)
@@ -73,19 +74,31 @@ class Evolution:
         else:
             # TODO ( Parent selection and child generation )
             parents = sus(prev_players, num_players)
+            random.shuffle(parents)
+            children = []
+            for i in range(0, len(parents), 2) :
+                children += self.make_baby(parents[i], parents[i+1])
+            return children
 
-            new_players = prev_players  # DELETE THIS AFTER YOUR IMPLEMENTATION
-            return new_players
+    def crossover(self, clayers1, clayers2, players1, players2):
+        for i in range(len(players1)):
+            layer1 = players1[i]
+            layer2 = players2[i]
+            length = len(layer1) * len(layer1[0])
+            index = round(np.random.random() * length)
+            layer3 = np.array(list(layer1.reshape(length)[:index]) + list(layer2.reshape(length)[index:])).reshape([len(layer1), len(layer1[0])])
+            layer4 = np.array(list(layer2.reshape(length)[:index]) + list(layer1.reshape(length)[index:])).reshape([len(layer1), len(layer1[0])])
+            clayers1[i] = layer3
+            clayers2[i] = layer4
 
-    def crossover(self, layers1, layers2):
-        pass
-    
     def make_baby(self, father, mother):
-        baby_girl = Player(self.game_mode)
-        baby_boy = Player(self.game_mode)
-        baby_girl.fitness = father.fitness
-        baby_boy.fitness = mother.fitness
+        baby_girl = self.clone_player(mother)
+        baby_boy = self.clone_player(father)
+        self.crossover(baby_boy.nn.layers, baby_girl.nn.layers, father.nn.layers, mother.nn.layers)
+        #self.crossover(baby_boy.nn.biases, baby_girl.nn.biases, father.nn.biases, mother.nn.biases)
 
+        return [baby_girl, baby_boy]
+        
         
     
     def clone_player(self, player):
