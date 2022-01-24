@@ -47,6 +47,7 @@ class Evolution:
         self.game_mode = "Neuroevolution"
         self.accuracy = []
         self.mutate_num = 0
+        self.mutate_thresh = self.calc_mutate_thresh()
 
     def next_population_selection(self, players, num_players):
         """
@@ -65,9 +66,9 @@ class Evolution:
         max = np.max(fits)
         min = np.min(fits)
         average = np.average(fits)
-        var = np.var(fits)
-        print([min, max, average, self.mutate_num])
+        print([min, max, average, self.mutate_num, self.mutate_thresh])
         self.accuracy.append((min, max, average, self.mutate_num))
+        self.mutate_num = 0
         return next_population
 
     def generate_new_population(self, num_players, prev_players=None):
@@ -85,6 +86,7 @@ class Evolution:
             # TODO ( Parent selection and child generation )
             parents = sus(prev_players, num_players)
             random.shuffle(parents)
+            self.mutate_thresh = self.calc_mutate_thresh()
             children = []
             for i in range(0, len(parents), 2) :
                 children += self.make_baby(parents[i], parents[i+1])
@@ -112,9 +114,22 @@ class Evolution:
                 layer.reshape(length)[index] = new_weight
                 
 
+    def calc_mutate_thresh(self):
+        if len(self.accuracy) > 4 :
+            maxes = list(map(lambda acc: acc[1], self.accuracy[-5:]))
+            avges = list(map(lambda acc: acc[2], self.accuracy[-5:]))
+            maxes = list(map(lambda m: np.mean(maxes) if m < 0.7*np.mean(maxes) else m, maxes))
+            avges = list(map(lambda a: np.mean(avges) if a < 0.7*np.mean(avges) else a, avges))
+            max_growth = np.var(maxes)
+            avg_growth = np.sqrt(np.var(avges))
+            print(max_growth, avg_growth)
+            growth = max(0, max_growth + avg_growth/5)
+            return 0.3/(0.08*growth + 1) + 0.1
+        else:
+            return 0.1
 
     def make_baby(self, father, mother):
-        mutate_thresh = 0.1
+        mutate_thresh = self.mutate_thresh
         baby_girl = self.clone_player(mother)
         baby_boy = self.clone_player(father)
         self.crossover(baby_boy.nn.layers, baby_girl.nn.layers, father.nn.layers, mother.nn.layers)
