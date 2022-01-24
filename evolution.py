@@ -41,11 +41,11 @@ def sus(x, num) :
         l.append(x[index])
     return l
 
-accuracy = []
 
 class Evolution:
     def __init__(self):
         self.game_mode = "Neuroevolution"
+        self.accuracy = []
 
     def next_population_selection(self, players, num_players):
         """
@@ -66,7 +66,7 @@ class Evolution:
         average = np.average(fits)
         var = np.var(fits)
         print([min, max, average, var])
-        accuracy.append([min, max, average, var])
+        self.accuracy.append((min, max, average, var))
         return next_population
 
     def generate_new_population(self, num_players, prev_players=None):
