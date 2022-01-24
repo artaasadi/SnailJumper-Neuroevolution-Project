@@ -3,6 +3,7 @@ import copy
 from player import Player
 import numpy as np
 import random
+import pandas as pd
 
 def top_k(x, num) :
     x= sorted(x, key= lambda i: i.fitness, reverse= True)
@@ -40,6 +41,7 @@ def sus(x, num) :
         l.append(x[index])
     return l
 
+accuracy = []
 
 class Evolution:
     def __init__(self):
@@ -58,6 +60,13 @@ class Evolution:
         # TODO (Additional: Implement SUS here)
         next_population = sus(players, num_players)
         # TODO (Additional: Learning curve)
+        fits = list(map(lambda player: player.fitness, players))
+        max = np.max(fits)
+        min = np.min(fits)
+        average = np.average(fits)
+        var = np.var(fits)
+        print([min, max, average, var])
+        accuracy.append([min, max, average, var])
         return next_population
 
     def generate_new_population(self, num_players, prev_players=None):
