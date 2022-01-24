@@ -91,14 +91,27 @@ class Evolution:
             clayers1[i] = layer3
             clayers2[i] = layer4
 
-    def mutate(self, clayers1, clayers2, players1, players2):
-        pass
-    
+    def mutate(self, layers, threshold):
+        for layer in layers:
+            chance = np.random.random()
+            if chance < threshold :
+                length = len(layer) * len(layer[0])
+                index = round(np.random.random() * (length-1))
+                new_weight = np.random.normal(0, 1)
+                layer.reshape(length)[index] = new_weight
+                
+
+
     def make_baby(self, father, mother):
+        mutate_thresh = 0.1
         baby_girl = self.clone_player(mother)
         baby_boy = self.clone_player(father)
         self.crossover(baby_boy.nn.layers, baby_girl.nn.layers, father.nn.layers, mother.nn.layers)
         self.crossover(baby_boy.nn.biases, baby_girl.nn.biases, father.nn.biases, mother.nn.biases)
+        self.mutate(baby_boy.nn.layers, mutate_thresh)
+        self.mutate(baby_girl.nn.layers, mutate_thresh)
+        self.mutate(baby_girl.nn.biases, mutate_thresh)
+        self.mutate(baby_boy.nn.biases, mutate_thresh)
 
         return [baby_girl, baby_boy]
         

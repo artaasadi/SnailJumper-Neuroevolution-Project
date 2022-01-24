@@ -76,14 +76,14 @@ class Player(pygame.sprite.Sprite):
         # TODO (change player's gravity here by calling self.change_gravity)
         inputs = np.array([(player_x - 177)/253] + get_obstacles(obstacles, self.near_obstacles_select))
         outputs = self.nn.forward(inputs)
-        '''if np.argmax(outputs) == 0 :
+        if np.argmax(outputs) == 0 and np.max(outputs) > 0.8:
             self.change_gravity("left")
         else :
-            self.change_gravity("right")'''
-        if outputs[0][0] >= 0.8 :
-            self.change_gravity("left")
-        elif outputs[1][0] >= 0.8 :
             self.change_gravity("right")
+        '''if outputs[0] >= 0.8 :
+            self.change_gravity("left")
+        elif outputs[1] >= 0.8 :
+            self.change_gravity("right")'''
 
         # This is a test code that changes the gravity based on a random number. Remove it before your implementation.
 
