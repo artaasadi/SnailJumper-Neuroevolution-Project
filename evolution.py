@@ -46,6 +46,7 @@ class Evolution:
     def __init__(self):
         self.game_mode = "Neuroevolution"
         self.accuracy = []
+        self.mutate_num = 0
 
     def next_population_selection(self, players, num_players):
         """
@@ -65,8 +66,8 @@ class Evolution:
         min = np.min(fits)
         average = np.average(fits)
         var = np.var(fits)
-        print([min, max, average, var])
-        self.accuracy.append((min, max, average, var))
+        print([min, max, average, self.mutate_num])
+        self.accuracy.append((min, max, average, self.mutate_num))
         return next_population
 
     def generate_new_population(self, num_players, prev_players=None):
@@ -104,6 +105,7 @@ class Evolution:
         for layer in layers:
             chance = np.random.random()
             if chance < threshold :
+                self.mutate_num += 1
                 length = len(layer) * len(layer[0])
                 index = round(np.random.random() * (length-1))
                 new_weight = np.random.normal(0, 1)
