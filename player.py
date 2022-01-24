@@ -57,7 +57,7 @@ class Player(pygame.sprite.Sprite):
             self.fitness = 0  # Initial fitness
             
             # one for player_x 2 for flies' x and y
-            layer_sizes = [self.near_obstacles_select + 3, 8, 10, 2]  # TODO (Design your architecture here by changing the values)
+            layer_sizes = [self.near_obstacles_select + 3, 10, 10, 2]  # TODO (Design your architecture here by changing the values)
             self.nn = NeuralNetwork(layer_sizes)
 
     def think(self, screen_width, screen_height, obstacles, player_x, player_y):
