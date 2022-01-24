@@ -77,9 +77,15 @@ class Evolution:
             new_players = prev_players  # DELETE THIS AFTER YOUR IMPLEMENTATION
             return new_players
 
+    def crossover(self, layers1, layers2):
+        pass
     
     def make_baby(self, father, mother):
-        baby = Player(self.game_mode)
+        baby_girl = Player(self.game_mode)
+        baby_boy = Player(self.game_mode)
+        baby_girl.fitness = father.fitness
+        baby_boy.fitness = mother.fitness
+
         
     
     def clone_player(self, player):
