@@ -10,7 +10,7 @@ def get_obstacles(obstacles, number):
     obstacles = list(filter(lambda d: d['y'] < 640, obstacles))
     # only get {number} nearest obstacles
     obstacles = sorted(obstacles, key= lambda d: d['y'], reverse= True)
-    fly = list(filter(lambda d: (177 < d['x'] < 410) & (d['y'] > 100), obstacles))
+    fly = list(filter(lambda d: (177 < d['x'] < 410) & (d['y'] > 300), obstacles))
     if len(obstacles) < number :
         obstacles += [{'x': 410, 'y': -100}] * (number - len(obstacles))
     else :
@@ -78,7 +78,7 @@ class Player(pygame.sprite.Sprite):
         outputs = self.nn.forward(inputs)
         if np.argmax(outputs) == 0 and np.max(outputs) > 0.8:
             self.change_gravity("left")
-        else :
+        elif np.argmax(outputs) == 1 and np.max(outputs) > 0.8:
             self.change_gravity("right")
         '''if outputs[0] >= 0.8 :
             self.change_gravity("left")

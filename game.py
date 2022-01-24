@@ -128,7 +128,7 @@ def update_fitness():
 def reset_timer_and_seed():
     np.random.seed(35)
     pygame.time.set_timer(snail_timer, 500)
-    pygame.time.set_timer(fly_timer, 4750)
+    #pygame.time.set_timer(fly_timer, 4750)
 
 
 if __name__ == '__main__':
@@ -187,6 +187,10 @@ if __name__ == '__main__':
     while True:
         global_variables['events'] = pygame.event.get()
         for event in global_variables['events']:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_k or event.key == pygame.K_d :
+                    for player in players:
+                        player.kill()
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
@@ -216,7 +220,6 @@ if __name__ == '__main__':
                     if clicked_exit_btn:
                         pygame.quit()
                         exit()
-
         if game_active:
             screen.blit(background_surface, (0, 0))
 
