@@ -91,11 +91,14 @@ class Evolution:
             clayers1[i] = layer3
             clayers2[i] = layer4
 
+    def mutate(self, clayers1, clayers2, players1, players2):
+        pass
+    
     def make_baby(self, father, mother):
         baby_girl = self.clone_player(mother)
         baby_boy = self.clone_player(father)
         self.crossover(baby_boy.nn.layers, baby_girl.nn.layers, father.nn.layers, mother.nn.layers)
-        #self.crossover(baby_boy.nn.biases, baby_girl.nn.biases, father.nn.biases, mother.nn.biases)
+        self.crossover(baby_boy.nn.biases, baby_girl.nn.biases, father.nn.biases, mother.nn.biases)
 
         return [baby_girl, baby_boy]
         

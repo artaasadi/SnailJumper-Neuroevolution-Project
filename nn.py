@@ -16,7 +16,7 @@ class NeuralNetwork:
         for i in range((len(layer_sizes) - 1)) :
             np.random.seed()
             layer = np.random.normal(0, 1, [layer_sizes[i+1], layer_sizes[i]])
-            bias = np.zeros([layer_sizes[i+1], ])
+            bias = np.zeros([layer_sizes[i+1], 1])
             layers.append(layer)
             biases.append(bias)
         self.layers = layers

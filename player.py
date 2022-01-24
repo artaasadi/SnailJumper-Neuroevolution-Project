@@ -80,9 +80,9 @@ class Player(pygame.sprite.Sprite):
             self.change_gravity("left")
         else :
             self.change_gravity("right")'''
-        if outputs[0] >= 0.8 :
+        if outputs[0][0] >= 0.8 :
             self.change_gravity("left")
-        elif outputs[1] >= 0.8 :
+        elif outputs[1][0] >= 0.8 :
             self.change_gravity("right")
 
         # This is a test code that changes the gravity based on a random number. Remove it before your implementation.
