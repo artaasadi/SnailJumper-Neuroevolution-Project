@@ -25,24 +25,18 @@ def get_obstacles(obstacles, number):
     #    l += [(obstacle['x'] - 177) / 233, (obstacle['y'] + 100)/740]
     #obstacles = list(map(master_function, obstacles))
     #                            #(d['y'] + 100)/(740) if d['x'] > 293 else -((d['y'] + 100)/(740)), obstacles))
-    left_snail = 0
     left = 0
     middle = 0
     right = 0
-    right_snail = 0
     for i in range(len(obstacles)):
         d = obstacles[i]
-        if 177 < d['x'] < 266 :
+        if 177 <= d['x'] < 254 :
             left += d['y'] * (len(obstacles) - i)
-        elif 266 <= d['x'] <= 320 :
+        elif 254 <= d['x'] < 332 :
             middle += d['y'] * (len(obstacles) - i)
-        elif 320 < d['x'] < 410 :
+        else :
             right += d['y'] * (len(obstacles) - i)
-        elif d['x'] == 177 :
-            left_snail += d['y'] * (len(obstacles) - i)
-        elif d['x'] == 410 :
-            right_snail += d['y'] * (len(obstacles) - i)
-    return [left_snail, left, middle, right, right_snail]
+    return [left, middle, right]
 
 
 
@@ -78,7 +72,7 @@ class Player(pygame.sprite.Sprite):
             self.fitness = 0  # Initial fitness
             
             # one for player_x 2 for flies' x and y
-            layer_sizes = [6, 10, 6, 2]  # TODO (Design your architecture here by changing the values)
+            layer_sizes = [(self.near_obstacles_select) + 1, 10, 6, 2]  # TODO (Design your architecture here by changing the values)
             self.nn = NeuralNetwork(layer_sizes)
 
     def think(self, screen_width, screen_height, obstacles, player_x, player_y):
