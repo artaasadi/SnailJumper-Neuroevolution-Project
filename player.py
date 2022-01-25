@@ -6,16 +6,12 @@ from nn import NeuralNetwork
 import numpy as np
 
 def master_function(d):
-    if 177 <= d['x'] < 223 :
+    if 177 <= d['x'] < 254 :
         return (d['y'] + 100)/(740)
-    elif 223 <= d['x'] < 269 :
+    elif 254 <= d['x'] < 332 :
         return 1 + (d['y'] + 100)/(740)
-    elif 269 <= d['x'] < 315 :
-        return 2 + (d['y'] + 100)/(740)
-    elif 315 <= d['x'] < 361 :
-        return 3 + (d['y'] + 100)/(740)
     else :
-        return 4 + (d['y'] + 100)/(740)
+        return 2 + (d['y'] + 100)/(740)
 
 def get_obstacles(obstacles, number):
     # filter those obstacles which passed
