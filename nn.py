@@ -54,6 +54,9 @@ class NeuralNetwork:
         #answer = self.batch_normalization(x)
         answer = x
         for i in range(len(self.layers)) :
-            answer = self.activation((self.layers[i] @ answer + self.biases[i][0]), "sigmoid")
+            if i < len(self.layers) - 1 :
+                answer = self.activation((self.layers[i] @ answer + self.biases[i][0]), "sigmoid")
+            else :
+                answer = self.activation((self.layers[i] @ answer + self.biases[i][0]), "softmax")
 
         return answer

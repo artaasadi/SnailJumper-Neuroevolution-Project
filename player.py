@@ -20,10 +20,13 @@ def get_obstacles(obstacles, number):
         obstacles += [{'x': 410, 'y': -100}] * (number - len(obstacles))
     else :
         obstacles = obstacles[:number]
-    obstacles = list(map(master_function, obstacles))
+    l = []
+    for obstacle in obstacles :
+        l += [(obstacle['x'] - 177) / 233, (obstacle['y'] + 100)/740]
+    #obstacles = list(map(master_function, obstacles))
                                 #(d['y'] + 100)/(740) if d['x'] > 293 else -((d['y'] + 100)/(740)), obstacles))
 
-    return obstacles
+    return l
 
 
 
@@ -78,9 +81,9 @@ class Player(pygame.sprite.Sprite):
         # TODO (change player's gravity here by calling self.change_gravity)
         inputs = np.array([(player_x - 177)/253] + get_obstacles(obstacles, self.near_obstacles_select))
         outputs = self.nn.forward(inputs)
-        if np.argmax(outputs) == 0 and np.max(outputs) > 0.8:
+        if np.argmax(outputs) == 0:
             self.change_gravity("left")
-        elif np.argmax(outputs) == 1 and np.max(outputs) > 0.8:
+        elif np.argmax(outputs) == 1:
             self.change_gravity("right")
         '''if outputs[0] >= 0.8 :
             self.change_gravity("left")
