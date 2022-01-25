@@ -38,10 +38,10 @@ class NeuralNetwork:
             return np.maximum(x,0)
 
     def batch_normalization(self, x, eps=1e-5):
-        mean = x.mean(axis= 0)
-        var = x.var(axis= 0)
+        mean = sum(x) / len(x)
+        var = sum((x - mean) ** 2) / len(x)
         std = np.sqrt(var + eps)
-        return list(map(lambda i: (i - mean) / std, x))
+        return (x - mean) / std
 
     def forward(self, x):
         """
@@ -51,12 +51,12 @@ class NeuralNetwork:
         """
         # TODO (Implement forward function here)
         # not using batch_normalization had better result
-        #answer = self.batch_normalization(x)
-        answer = x
+        answer = self.batch_normalization(x)
+        #answer = x
         for i in range(len(self.layers)) :
             if i < len(self.layers) - 1 :
                 answer = self.activation((self.layers[i] @ answer + self.biases[i][0]), "sigmoid")
             else :
-                answer = self.activation((self.layers[i] @ answer + self.biases[i][0]), "softmax")
+                answer = self.activation((self.layers[i] @ answer + self.biases[i][0]), "sigmoid")
 
         return answer

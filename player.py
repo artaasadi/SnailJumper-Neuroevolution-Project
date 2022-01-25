@@ -20,13 +20,23 @@ def get_obstacles(obstacles, number):
         obstacles += [{'x': 410, 'y': -100}] * (number - len(obstacles))
     else :
         obstacles = obstacles[:number]
-    l = []
-    for obstacle in obstacles :
-        l += [(obstacle['x'] - 177) / 233, (obstacle['y'] + 100)/740]
+    #l = []
+    #for obstacle in obstacles :
+    #    l += [(obstacle['x'] - 177) / 233, (obstacle['y'] + 100)/740]
     #obstacles = list(map(master_function, obstacles))
-                                #(d['y'] + 100)/(740) if d['x'] > 293 else -((d['y'] + 100)/(740)), obstacles))
-
-    return l
+    #                            #(d['y'] + 100)/(740) if d['x'] > 293 else -((d['y'] + 100)/(740)), obstacles))
+    left = 0
+    middle = 0
+    right = 0
+    for i in range(len(obstacles)):
+        d = obstacles[i]
+        if 177 <= d['x'] < 254 :
+            left += d['y'] * (len(obstacles) - i)
+        elif 254 <= d['x'] < 332 :
+            middle += d['y'] * (len(obstacles) - i)
+        else :
+            right += d['y'] * (len(obstacles) - i)
+    return [left, middle, right]
 
 
 
@@ -62,7 +72,7 @@ class Player(pygame.sprite.Sprite):
             self.fitness = 0  # Initial fitness
             
             # one for player_x 2 for flies' x and y
-            layer_sizes = [(self.near_obstacles_select * 2) + 1, 10, 10, 2]  # TODO (Design your architecture here by changing the values)
+            layer_sizes = [(self.near_obstacles_select) + 1, 10, 2]  # TODO (Design your architecture here by changing the values)
             self.nn = NeuralNetwork(layer_sizes)
 
     def think(self, screen_width, screen_height, obstacles, player_x, player_y):
@@ -79,7 +89,7 @@ class Player(pygame.sprite.Sprite):
         :param player_y: 'y' position of the player
         """
         # TODO (change player's gravity here by calling self.change_gravity)
-        inputs = np.array([(player_x - 177)/253] + get_obstacles(obstacles, self.near_obstacles_select))
+        inputs = np.array([(player_x )] + get_obstacles(obstacles, self.near_obstacles_select))
         outputs = self.nn.forward(inputs)
         if np.argmax(outputs) == 0:
             self.change_gravity("left")
