@@ -5,6 +5,18 @@ from variables import global_variables
 from nn import NeuralNetwork
 import numpy as np
 
+def master_function(d):
+    if 177 <= d['x'] < 223 :
+        return (d['y'] + 100)/(740)
+    elif 223 <= d['x'] < 269 :
+        return 1 + (d['y'] + 100)/(740)
+    elif 269 <= d['x'] < 315 :
+        return 2 + (d['y'] + 100)/(740)
+    elif 315 <= d['x'] < 361 :
+        return 3 + (d['y'] + 100)/(740)
+    else :
+        return 4 + (d['y'] + 100)/(740)
+
 def get_obstacles(obstacles, number):
     # filter those obstacles which passed
     obstacles = list(filter(lambda d: d['y'] < 640, obstacles))
@@ -15,7 +27,8 @@ def get_obstacles(obstacles, number):
         obstacles += [{'x': 410, 'y': -100}] * (number - len(obstacles))
     else :
         obstacles = obstacles[:number]
-    obstacles = list(map(lambda d: (d['y'] + 100)/(740) if d['x'] > 293 else -((d['y'] + 100)/(740)), obstacles))
+    obstacles = list(map(master_function, obstacles))
+                                #(d['y'] + 100)/(740) if d['x'] > 293 else -((d['y'] + 100)/(740)), obstacles))
     '''if len(fly) > 0 :
         fly = fly[0]
         obstacles += [(((fly['x'] - 177)/233) * 2) - 1, (((fly['y'] + 100)/740) * 2) - 1]
